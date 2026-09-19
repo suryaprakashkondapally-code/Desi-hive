@@ -78,7 +78,7 @@ node server.js
 > **Surya Prakash Kondapally**<br>
 > *Developer | Student | Learner*<br>
 > [GitHub Profile](https://github.com/suryaprakashkondapally-code)<br>
-> Gmail: suryaprakashkondapally@gmail.com
+> suryaprakashkondapally@gmail.com
 ---
 
 <p align="center">
