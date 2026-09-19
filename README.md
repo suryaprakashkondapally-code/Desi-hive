@@ -28,11 +28,5 @@ Desi Hive is a unified, hyper-local ecosystem designed to bridge the gap between
 
 ---
 
-## 🚀 Getting Started Locally
 
-To run this project on your local machine, follow these steps:
 
-### 1. Clone the Repository
-```bash
-git clone https://github.com/suryaprakashkondapally-code/Desi-hive.git
-cd Desi-hive
