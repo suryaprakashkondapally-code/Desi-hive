@@ -1,77 +1,74 @@
-Markdown
 # 🐝 Desi Hive (DesiHive.in)
 
 > **The Global Digital Village for People of Indian Origin**
 
-[![HTML5](https://img.shields.io/badge/Frontend-HTML5%20%2F%20TailwindCSS-orange?style=flat-square)](https://developer.mozilla.org/)
-[![Node.js](https://img.shields.io/badge/Backend-Node.js%20%2F%20Express-green?style=flat-square)](https://nodejs.org/)
-[![Firebase](https://img.shields.io/badge/Database-Firebase%20Firestore-yellow?style=flat-square)](https://firebase.google.com/)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
+---
+
+## 📌 Project Overview
+> **Desi Hive** is a unified, hyper-local ecosystem built to connect the 30-million-strong global Indian diaspora. It bridges cultural gaps, promotes community safety, facilitates localized micro-economies, and eradicates immigrant isolation by organizing users into structured **Global Hoods** (Country, State, and Neighborhood tiers).
 
 ---
 
-## 🌟 About The Project
-
-**Desi Hive** is a unified, hyper-local ecosystem built to connect the 30-million-strong global Indian diaspora. Spanning across safety, resource sharing, employment, and culture, the platform organizes users into structured **Global Hoods** across Country, State, and Neighborhood tiers to eliminate immigrant isolation.
-
----
-
-## 🚀 Key Features & Modules
-
-* **🌍 Global Hoods & Sub-Group Chats:** Structured National, State, and Neighborhood chat rooms equipped with dedicated sub-channels for regular chatter, events, SOS alerts, and community donations.
-* **🤖 Dost AI Companion:** An integrated Gemini-powered AI assistant present across chat environments to provide guidance and platform support using friendly, localized context.
-* **🚨 Global SOS & Free Mapping:** A 10-second countdown emergency system integrated with **Leaflet.js and OpenStreetMap** that broadcasts real-time crisis alerts and precise GPS map coordinates to nearby members.
-* **🩸 Rakt Sewa (Blood Donor Network):** A peer-to-peer blood donation matching system equipped with automated Gmail dispatching via Nodemailer to alert compatible neighborhood donors instantly.
-* **💼 Hiring Hive & Desi Bazaar:** A community job board supporting resume/CV uploads and application tracking, alongside a local peer-to-peer marketplace to buy, sell, and barter goods.
-* **📰 Smart Dual News Engine:** Real-time dual news feeds powered by NewsData.io, displaying national headlines alongside localized home-state and regional updates.
-
----
-
-## 🛠️ Tech Stack
-
-* **Frontend:** HTML5, CSS3, Tailwind CSS, JavaScript (ES6+), FontAwesome
+## 🛠️ Core Technology Stack
+* **Frontend:** HTML5, Tailwind CSS, JavaScript (ES6+), FontAwesome
 * **Mapping Engine:** Leaflet.js, OpenStreetMap API
-* **Backend & Cloud Services:** Node.js, Express.js, Firebase Auth & Firestore (v12.16.0)
-* **Email Automation:** Nodemailer, Gmail SMTP, EmailJS API
-* **AI Integration:** Google Gemini API (`gemini-3.6-flash`)
+* **Backend & Database:** Node.js, Express.js, Firebase Auth & Firestore (v12.16.0)
+* **Email Services:** Nodemailer, Gmail SMTP, EmailJS API
+* **Artificial Intelligence:** Google Gemini API (`gemini-3.6-flash`)
 * **News Intelligence:** NewsData.io API
 
 ---
 
-## 📂 Project Structure
+## 📦 Core Modules
 
-```text
-Desi-hive/
-├── index.html        # Single-Page Application (Frontend UI, Maps & Logic)
-├── server.js         # Node.js & Express Backend (Nodemailer / Email Services)
-├── package.json      # Node dependencies and configuration
-└── README.md         # Project documentation
-💻 Getting Started Locally
-To run this project on your local machine, follow these steps:
+### 1. 🌍 Global Hoods & Sub-Group Chats
+* **Hierarchical Lounges:** Segregated chat spaces across National, State, and Local tiers.
+* **Subgroup Channels:** Dedicated spaces for regular chatter, events, SOS alerts, and donations.
 
-1. Clone the Repository
-Bash
+### 2. 🤖 Dost AI Companion
+* **Conversational AI:** Powered by the Google Gemini API to assist users with platform navigation.
+* **Cultural Context:** Integrated across chat rooms using friendly, localized slang and guidance.
+
+### 3. 🚨 Global SOS & Free Mapping
+* **10-Second Triage:** Rapid emergency trigger featuring a countdown timer and audio siren simulation.
+* **OpenStreetMap Integration:** Powered by Leaflet.js with custom controls (`attributionControl: false`) for seamless GPS coordinate broadcasting.
+
+### 4. 🩸 Rakt Sewa (Blood Donor Network)
+* **Peer-to-Peer Matching:** Connects blood donors with seekers based on real-time location data.
+* **Automated Gmail Dispatch:** Instant email alerts dispatched via the Node.js backend.
+
+### 5. 💼 Hiring Hive & Desi Bazaar
+* **Employment Board:** Segmented career filters with drag-and-drop resume/CV upload support.
+* **Community Marketplace:** Local peer-to-peer bartering and marketplace listings.
+
+---
+
+## 🚀 Local Installation Guide
+
+To run this project locally, execute the following steps in your terminal:
+
+```bash
+# 1. Clone the Repository
 git clone [https://github.com/suryaprakashkondapally-code/Desi-hive.git](https://github.com/suryaprakashkondapally-code/Desi-hive.git)
 cd Desi-hive
-2. Install Dependencies
-Bash
+
+# 2. Install Dependencies
 npm install
-3. Run the Backend Mail Server
-Start the Express backend to handle secure OTP verification, welcome emails, and emergency SOS alerts:
 
-Bash
+# 3. Start the Backend Mail Server
 node server.js
-(The server runs locally on http://localhost:5000).
 
-4. Launch the Frontend
-Open index.html using a local development server (such as the Live Server extension in Visual Studio Code) to view and test the application interface.
+# 4. Launch Frontend
+# Open index.html using Live Server in VS Code
 
-🔒 Security & Optimizations
-Authentication: Enforces strict password criteria (minimum 8 characters, at least 1 uppercase letter, and 1 number) paired with secure Gmail verification codes.
+---
 
-Billing-Free Mapping: Utilizes Leaflet and OpenStreetMap with customized control overrides (attributionControl: false) to ensure a clean, cost-free interactive mapping experience.
+## 🔒 Security & Architecture
+Strict Authentication: Enforces secure password criteria and 4-digit Gmail OTP verification.
 
-👨‍💻 Author
+Real-Time Sync: Utilizes Firebase Firestore listeners (onSnapshot) for live data updates without page reloads.
+
+## 👨‍💻 Author & Developer
 Surya Prakash Kondapally
 
 Full-Stack Developer | Final-Year B.Tech Engineering Student
