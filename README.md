@@ -75,11 +75,10 @@ node server.js
 
 ## 👨‍💻 Author & Developer
 
-> **Surya Prakash Kondapally**  
-> *Developer | *Student | learner*
-> [GitHub Profile](https://github.com/suryaprakashkondapally-code)
-> Gmail-suryaprakshkondapally@gmail.com
-
+> **Surya Prakash Kondapally**<br>
+> *Developer | Student | Learner*<br>
+> [GitHub Profile](https://github.com/suryaprakashkondapally-code)<br>
+> Gmail: suryaprakashkondapally@gmail.com
 ---
 
 <p align="center">
