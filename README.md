@@ -76,8 +76,9 @@ node server.js
 ## 👨‍💻 Author & Developer
 
 > **Surya Prakash Kondapally**  
-> *Full-Stack Developer | Final-Year B.Tech Engineering Student*  
-> [GitHub Profile](https://github.com/suryaprakashkondapally-code)  
+> *Developer | *Student | learner*
+> [GitHub Profile](https://github.com/suryaprakashkondapally-code)
+> Gmail-suryaprakshkondapally@gmail.com
 
 ---
 
