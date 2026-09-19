@@ -71,8 +71,7 @@ Authentication: Enforces strict password criteria (minimum 8 characters, at leas
 
 Billing-Free Mapping: Utilizes Leaflet and OpenStreetMap with customized control overrides (attributionControl: false) to ensure a clean, cost-free interactive mapping experience.
 
-
 👨‍💻 Author
 Surya Prakash Kondapally
 
-Full-Stack Developer | Student
+Full-Stack Developer | Final-Year B.Tech Engineering Student
