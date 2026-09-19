@@ -5,11 +5,13 @@
 ---
 
 ## 📌 Project Overview
+
 > **Desi Hive** is a unified, hyper-local digital ecosystem built to connect the 30-million-strong global Indian diaspora. It bridges cultural gaps, promotes community safety, facilitates localized micro-economies, and eradicates immigrant isolation by organizing users into structured **Global Hoods** (Country, State, and Neighborhood tiers).
 
 ---
 
 ## 🛠️ Core Technology Stack
+
 * **Frontend UI/UX:** HTML5, Tailwind CSS, JavaScript (ES6+), FontAwesome
 * **Mapping Engine:** Leaflet.js, OpenStreetMap API
 * **Backend & Database:** Node.js, Express.js, Firebase Auth & Firestore (v12.16.0)
@@ -49,7 +51,7 @@ To run this project locally on your machine, execute the following steps in your
 
 ```bash
 # 1. Clone the Repository
-git clone https://github.com/suryaprakashkondapally-code/Desi-hive.git
+git clone [https://github.com/suryaprakashkondapally-code/Desi-hive.git](https://github.com/suryaprakashkondapally-code/Desi-hive.git)
 cd Desi-hive
 
 # 2. Install Dependencies
@@ -60,11 +62,13 @@ node server.js
 
 # 4. Launch Frontend
 # Open index.html using Live Server in VS Code
+```
+
 ---
 
 ## 🔒 Security & Architecture
 
-* **Strict Authentication:** Enforces secure password criteria (minimum 8 characters, at least 1 uppercase letter, and 1 number) paired with secure 4-digit Gmail OTP verification.
+* **Strict Authentication:** Enforces secure password criteria (minimum 8 characters, 1 uppercase letter, 1 number) and 4-digit Gmail OTP verification.
 * **Real-Time Sync:** Utilizes Firebase Firestore listeners (`onSnapshot`) for live data updates across clients without page reloads.
 
 ---
