@@ -232,3 +232,4 @@ const PORT = 5000;
 app.listen(PORT, () => {
     console.log(`🚀 Desi Hive Backend running on http://localhost:${PORT}`);
 });
+module.exports = app;

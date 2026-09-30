@@ -2218,7 +2218,7 @@ body.dark-theme textarea {
                 btn.innerText = "Sending...";
                 btn.disabled = true;
                 try {
-                    const response = await fetch('http://localhost:5000/api/send-otp', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email }) });
+                    const response = await fetch('/api/send-otp', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email }) });
                     if (response.ok) {
                         startResendTimer();
                         const toast = document.getElementById('otp-toast');
@@ -2664,7 +2664,7 @@ body.dark-theme textarea {
         }
 
         // TRIGGER WELCOME EMAIL VIA BACKEND SERVER
-        fetch('http://localhost:5000/api/welcome', {
+        fetch('/api/welcome', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -2949,7 +2949,7 @@ body.dark-theme textarea {
         // --- DISPATCH TO NODE.JS BACKEND FOR GMAIL ---
         try {
             console.log("Dispatching SOS to backend server...");
-            const response = await fetch('http://localhost:5000/api/sos-trigger', {
+            const response = await fetch('/api/sos-trigger', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -3913,7 +3913,7 @@ body.dark-theme textarea {
     };
 
     try {
-        const response = await fetch('http://localhost:5000/api/blood/request', {
+        const response = await fetch('/api/blood/request', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(templateParams)
@@ -3994,7 +3994,7 @@ body.dark-theme textarea {
 
     try {
         // 2. Dispatch email via your Node.js backend server
-        await fetch('http://localhost:5000/api/job/apply', {
+        await fetch('/api/job/apply', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
