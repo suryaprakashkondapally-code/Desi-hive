@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <title>Desi Hive - Unified Hub</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -715,7 +715,7 @@ body.dark-theme textarea {
                     <h3 class="text-xl font-black text-slate-800">Choose Profile Avatar</h3>
                     <button onclick="closeAvatarModal()" class="text-slate-400 hover:text-slate-600 text-xl font-bold">&times;</button>
                 </div>
-                <div class="grid grid-cols-4 gap-4 mb-6">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                     <div onclick="updateFinalAvatar('pilot')" class="avatar-option p-3 rounded-2xl cursor-pointer bg-slate-50 flex flex-col items-center"><img src="https://cdn-icons-png.flaticon.com/512/2115/2115916.png" class="w-12 h-12 object-contain"><span class="text-[10px] font-bold mt-1 text-slate-600">Pilot</span></div>
                     <div onclick="updateFinalAvatar('engineer')" class="avatar-option p-3 rounded-2xl cursor-pointer bg-slate-50 flex flex-col items-center"><img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="w-12 h-12 object-contain"><span class="text-[10px] font-bold mt-1 text-slate-600">Engineer</span></div>
                     <div onclick="updateFinalAvatar('doctor')" class="avatar-option p-3 rounded-2xl cursor-pointer bg-slate-50 flex flex-col items-center"><img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png" class="w-12 h-12 object-contain"><span class="text-[10px] font-bold mt-1 text-slate-600">Doctor</span></div>
@@ -805,7 +805,20 @@ body.dark-theme textarea {
                     <button type="button" onclick="togglePass()" class="absolute right-4 top-3 text-slate-400">
                         <i id="eye" class="fa-solid fa-eye"></i>
                     </button>
-                </div>
+                    <!-- Forgot Password Button -->
+<div class="text-right mt-1 mb-2">
+  <button type="button" id="forgot-password-btn" class="text-xs text-blue-600 hover:underline">
+    Forgot Password?
+  </button>
+</div>
+      
+      <div class="relative mt-2">
+        <input type="text" id="location-input" placeholder="City, State" class="w-full bg-slate-100 px-4 py-3 rounded-xl text-sm outline-none">
+        <button type="button" id="auto-location-btn" class="absolute right-3 top-2.5 text-xs bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-1 rounded-lg font-bold">
+          📍 Detect
+        </button>
+      </div>
+             </div>
                 <button type="submit" id="main-btn" class="w-full desi-gradient text-white py-4 rounded-xl font-bold shadow-xl mt-2 uppercase tracking-widest text-xs active:scale-95 transition-transform">Continue</button>
             </form>
             <button onclick="toggleMode()" class="w-full text-center mt-6 text-xs text-amber-600 font-black hover:underline" id="mode-toggle">Create New Account</button>
@@ -1395,31 +1408,11 @@ body.dark-theme textarea {
                             <button onclick="openAvatarModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl text-xs font-bold transition">Adjust Photo</button>
                         </div>
                         <div class="grid grid-cols-2 gap-x-6 gap-y-8">
-                            <div>
-                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block">Full Name</label>
-                                <p id="prof-disp-name" class="font-bold text-slate-800 text-lg">User</p>
-                            </div>
-                            <div>
-                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block">Current Residence Location</label>
-                                <p id="prof-disp-loc" class="font-bold text-slate-800 text-lg">City, State</p>
-                            </div>
-                            <div>
-                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block">Date of Birth</label>
-                                <p id="prof-disp-dob" class="font-bold text-slate-800 text-lg">August 3, 2004</p>
-                            </div>
-                            <div>
-                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block">Gmail Address</label>
-                                <p id="prof-disp-email" class="font-bold text-slate-800 text-lg">suryakondapally03@gmail.com</p>
-                            </div>
-                            <div class="col-span-2">
-                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block">Indian Origin State</label>
-                                <p id="prof-disp-origin" class="font-bold text-slate-800 text-lg">Telangana, India</p>
-                            </div>
-                            <div class="col-span-2">
-                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block">Profession</label>
-                                <p id="prof-disp-profession" class="font-bold text-slate-800 text-lg">Commercial Pilot / Developer</p>
-                            </div>
-                        </div>
+                           <p id="prof-disp-name" class="font-bold text-slate-800 text-lg"></p>
+                           <p id="prof-disp-email" class="font-bold text-slate-800 text-lg"></p>
+                           <p id="prof-disp-dob" class="font-bold text-slate-800 text-lg"></p>
+                           <p id="prof-disp-profession" class="font-bold text-slate-800 text-lg"></p>
+                           <p id="prof-disp-loc" class="font-bold text-slate-800 text-lg"></p>
                         <div class="mt-8 pt-8 border-t border-slate-100 flex justify-end">
                             <button onclick="window.location.reload()" class="text-rose-500 font-bold hover:bg-rose-50 px-4 py-2 rounded-xl transition">Logout Profile</button>
                         </div>
@@ -4063,8 +4056,8 @@ body.dark-theme textarea {
        <script type="module">
             import {initializeApp} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
             import {getAnalytics} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
-            import {getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, updateDoc, increment} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
-            import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+            import {getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, updateDoc,getDoc, increment} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+            import {getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, setPersistence, browserLocalPersistence} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
             const firebaseConfig = {
                 apiKey: "AIzaSyAxLDJrzla1CIIfM8cH3KCgHAyZpN9uilg",
@@ -4080,6 +4073,13 @@ body.dark-theme textarea {
             const analytics = getAnalytics(app);
             const db = getFirestore(app);
             const auth = getAuth(app);
+            setPersistence(auth, browserLocalPersistence)
+  .then(() => {
+    console.log("Firebase local persistence enabled.");
+  })
+  .catch((error) => {
+    console.error("Error setting persistence:", error);
+  });
             
             // EXPORT FIREBASE FUNCTIONS TO WINDOW SO OUR APP CAN USE THEM
             window.db = db;
@@ -4103,7 +4103,212 @@ body.dark-theme textarea {
             if(window.setupFirebaseListeners) {
                 window.setupFirebaseListeners();
             }
-        </script>
+            onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    const userDocRef = doc(db, "users", user.uid);
+    const docSnap = await getDoc(userDocRef);
 
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      
+      document.getElementById("prof-disp-name").innerText = data.fullName || "User";
+      document.getElementById("prof-disp-email").innerText = user.email || "N/A";
+      document.getElementById("prof-disp-dob").innerText = data.dob || "Not set";
+      document.getElementById("prof-disp-profession").innerText = data.profession || "Not set";
+      document.getElementById("prof-disp-loc").innerText = data.residenceLocation || "Not set";
+    }
+  } else {
+    console.log("No user logged in");
+  }
+});
+
+  let generatedResetOTP = "";
+let targetResetEmail = "";
+
+// 1. Open view when clicking Forgot Password
+document.getElementById("forgot-password-btn")?.addEventListener("click", () => {
+  document.getElementById("forgot-password-view").classList.remove("hidden");
+});
+
+// Close view
+document.getElementById("close-reset-view")?.addEventListener("click", () => {
+  document.getElementById("forgot-password-view").classList.add("hidden");
+});
+
+// 2. Send OTP Step
+document.getElementById("send-otp-btn")?.addEventListener("click", () => {
+  targetResetEmail = document.getElementById("reset-email-input").value.trim();
+  if (!targetResetEmail) {
+    alert("Please enter your email address.");
+    return;
+  }
+  
+  generatedResetOTP = Math.floor(1000 + Math.random() * 9000).toString();
+  console.log("DEV MODE - Password Reset OTP:", generatedResetOTP);
+  
+  alert("OTP sent to your Gmail inbox! (Check browser console for dev mode OTP)");
+  
+  document.getElementById("otp-request-step").classList.add("hidden");
+  document.getElementById("otp-verify-step").classList.remove("hidden");
+});
+
+// 3. Verify OTP Step
+document.getElementById("verify-otp-btn")?.addEventListener("click", () => {
+  const enteredOTP = document.getElementById("reset-otp-input").value.trim();
+  if (enteredOTP === generatedResetOTP) {
+    alert("OTP Verified Successfully!");
+    document.getElementById("otp-verify-step").classList.add("hidden");
+    document.getElementById("new-password-step").classList.remove("hidden");
+  } else {
+    alert("Invalid OTP. Please try again.");
+  }
+});
+
+// 4. Update Password with Validation & Server Save
+document.getElementById("update-password-btn")?.addEventListener("click", async () => {
+  const oldPass = document.getElementById("old-pass-input").value;
+  const newPass = document.getElementById("new-pass-input").value;
+  const confirmPass = document.getElementById("confirm-pass-input").value;
+
+  // Rule 1: Old and new passwords must NOT be the same
+  if (oldPass === newPass) {
+    alert("Error: Old password and new password must not be the same!");
+    return;
+  }
+
+  // Rule 2: Re-entered password must match the new password
+  if (newPass !== confirmPass) {
+    alert("Error: Re-entered password does not match the new password!");
+    return;
+  }
+
+  if (newPass.length < 8) {
+    alert("Error: New password must be at least 8 characters long.");
+    return;
+  }
+
+  try {
+    const user = window.auth.currentUser;
+    if (!user) {
+      alert("Please log in or re-authenticate to update your password.");
+      return;
+    }
+
+    // Re-authenticate user with old password for security
+    const credential = EmailAuthProvider.credential(user.email, oldPass);
+    await reauthenticateWithCredential(user, credential);
+
+    // Save and update password on server (Firebase Auth)
+    await updatePassword(user, newPass);
+    
+    alert("Password updated and saved to server successfully!");
+    document.getElementById("forgot-password-view").classList.add("hidden");
+    window.location.reload();
+  } catch (error) {
+    console.error("Password update error:", error);
+    alert("Failed to update password: " + error.message);
+  }
+});
+   // Step 4: Auto-Detect User Location
+document.getElementById("auto-location-btn")?.addEventListener("click", () => {
+  const locationInput = document.getElementById("location-input");
+  
+  if (!navigator.geolocation) {
+    alert("Geolocation is not supported by your browser.");
+    return;
+  }
+
+  locationInput.value = "Detecting..."; // Show loading state
+
+  navigator.geolocation.getCurrentPosition(async (position) => {
+    const { latitude, longitude } = position.coords;
+    try {
+      // Free reverse-geocoding via OpenStreetMap
+      const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+      const data = await res.json();
+      
+      const city = data.address.city || data.address.town || data.address.village || "";
+      const state = data.address.state || "";
+      
+      // We will save this to a global window variable so Step 6 (Flags) can use it later
+      window.detectedCountryCode = data.address.country_code || "in"; 
+      
+      // Cleanly format the result (e.g., "Hyderabad, Telangana")
+      const formattedLocation = [city, state].filter(Boolean).join(", ");
+      locationInput.value = formattedLocation;
+      
+    } catch (err) {
+      console.error("Location detection failed:", err);
+      locationInput.value = "";
+      alert("Could not detect location. Please type it manually.");
+    }
+  }, (error) => {
+    console.warn("User denied geolocation access:", error);
+    locationInput.value = "";
+    alert("Location access denied. Please type your city manually.");
+  });
+});
+    // Step 6: Dynamic Host Country Flag (Using FlagCDN)
+document.getElementById("auto-location-btn")?.addEventListener("click", () => {
+  // Give it a 2-second delay to allow the OpenStreetMap fetch to finish
+  setTimeout(() => {
+    const countryCode = window.detectedCountryCode;
+    if (countryCode) {
+      const flagElement = document.getElementById("sidebar-source-flag");
+      if (flagElement) {
+        // OpenStreetMap returns lowercase codes (e.g., 'us', 'ae'), which perfectly matches flagcdn!
+        flagElement.src = `https://flagcdn.com/w40/${countryCode.toLowerCase()}.png`;
+        flagElement.title = `Detected Location: ${countryCode.toUpperCase()}`;
+      }
+    }
+  }, 2000);
+});
+        </script>
+    <!-- FORGOT PASSWORD & OTP VIEW (Hidden by default) -->
+<div id="forgot-password-view" class="hidden fixed inset-0 z-[250] flex items-center justify-center p-4 bg-slate-900/90">
+  <div class="w-full max-w-md bg-white p-8 rounded-[2rem] shadow-2xl space-y-4">
+    
+    <!-- Step A: Enter Email to Send OTP -->
+    <div id="otp-request-step">
+      <h2 class="text-xl font-bold text-slate-800">Reset Password</h2>
+      <p class="text-xs text-slate-500 mb-4">Enter your registered email to receive a verification OTP.</p>
+      <input type="email" id="reset-email-input" placeholder="Enter your email" class="w-full bg-slate-100 px-4 py-3 rounded-xl text-sm outline-none mb-3">
+      <button type="button" id="send-otp-btn" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold text-sm">Send OTP</button>
+    </div>
+
+    <!-- Step B: Verify OTP -->
+    <div id="otp-verify-step" class="hidden">
+      <h2 class="text-xl font-bold text-slate-800">Verify OTP</h2>
+      <p class="text-xs text-slate-500 mb-4">Enter the 4-digit code sent to your Gmail.</p>
+      <input type="text" id="reset-otp-input" placeholder="Enter 4-digit OTP" maxlength="4" class="w-full bg-slate-100 px-4 py-3 rounded-xl text-sm text-center tracking-widest outline-none mb-3">
+      <button type="button" id="verify-otp-btn" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold text-sm">Verify Code</button>
+    </div>
+
+    <!-- Step C: Change Password Form -->
+    <div id="new-password-step" class="hidden space-y-3">
+      <h2 class="text-xl font-bold text-slate-800">Create New Password</h2>
+      <p class="text-xs text-slate-500 mb-2">Old password and new password must not be the same.</p>
+      
+      <div>
+        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Old Password</label>
+        <input type="password" id="old-pass-input" placeholder="Current password" class="w-full bg-slate-100 px-4 py-2.5 rounded-xl text-sm outline-none">
+      </div>
+
+      <div>
+        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">New Password</label>
+        <input type="password" id="new-pass-input" placeholder="New password" class="w-full bg-slate-100 px-4 py-2.5 rounded-xl text-sm outline-none">
+      </div>
+
+      <div>
+        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Re-enter New Password</label>
+        <input type="password" id="confirm-pass-input" placeholder="Confirm new password" class="w-full bg-slate-100 px-4 py-2.5 rounded-xl text-sm outline-none">
+      </div>
+
+      <button type="button" id="update-password-btn" class="w-full bg-emerald-600 text-white py-3 rounded-xl font-bold text-sm mt-2">Update Password</button>
+    </div>
+
+    <button type="button" id="close-reset-view" class="w-full text-center text-xs text-slate-400 hover:text-slate-600 mt-2">Cancel / Back to Login</button>
+  </div>
+</div>
     </body>
 </html>
