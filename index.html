@@ -671,6 +671,51 @@ body.dark-theme textarea {
     color: #f1f5f9 !important;
     border-color: #334155 !important;
 }
+        /* --- RESPONSIVE SAFETY LAYER --- */
+
+        @media (max-width: 640px) {
+            .otp-input {
+                width: 42px;
+                height: 52px;
+                font-size: 1.25rem;
+            }
+
+            #setup-layer > div {
+                max-height: 96vh;
+                overflow-y: auto;
+                border-radius: 2rem;
+                padding: 1.25rem;
+                padding-top: 3.5rem;
+            }
+
+            #content-profile .grid {
+                grid-template-columns: 1fr;
+            }
+
+            #content-profile .col-span-2 {
+                grid-column: span 1 / span 1;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .otp-input {
+                width: 36px;
+                height: 48px;
+            }
+        }
+
+        #prof-disp-name,
+        #prof-disp-email,
+        #prof-disp-loc,
+        #prof-disp-origin,
+        #prof-disp-profession,
+        #prof-disp-dob {
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        /* --- END RESPONSIVE SAFETY LAYER --- */
+
         </style>
     </head>
     <body class="text-slate-700 min-h-screen">
@@ -806,6 +851,17 @@ body.dark-theme textarea {
                         <i id="eye" class="fa-solid fa-eye"></i>
                     </button>
                 </div>
+
+                <div id="forgot-pass-container" class="text-right mt-1 mb-3">
+                    <button
+                        type="button"
+                        onclick="startForgotPassword()"
+                        class="text-[10px] font-black text-slate-400 hover:text-amber-600 transition-colors uppercase tracking-wider"
+                    >
+                        Forgot Password?
+                    </button>
+                </div>
+
                 <button type="submit" id="main-btn" class="w-full desi-gradient text-white py-4 rounded-xl font-bold shadow-xl mt-2 uppercase tracking-widest text-xs active:scale-95 transition-transform">Continue</button>
             </form>
             <button onclick="toggleMode()" class="w-full text-center mt-6 text-xs text-amber-600 font-black hover:underline" id="mode-toggle">Create New Account</button>
@@ -833,11 +889,79 @@ body.dark-theme textarea {
             </div>
         </div>
 
+        <!-- NEW PASSWORD RECOVERY CONTAINER -->
+        <div id="recovery-container" class="hidden text-center py-4">
+            <h2 class="text-2xl font-black text-slate-900 tracking-tight mb-2">
+                Create New Password
+            </h2>
+
+            <p class="text-slate-500 text-xs mb-6 px-4">
+                Create a password that satisfies every security rule.
+            </p>
+
+            <div class="space-y-4">
+                <input
+                    type="password"
+                    id="new-pass-1"
+                    oninput="checkPasswordRules()"
+                    placeholder="New Password"
+                    class="w-full bg-white border border-slate-200 rounded-xl px-5 py-3 text-sm outline-none focus:border-amber-400"
+                >
+
+                <input
+                    type="password"
+                    id="new-pass-2"
+                    oninput="checkPasswordRules()"
+                    placeholder="Confirm Password"
+                    class="w-full bg-white border border-slate-200 rounded-xl px-5 py-3 text-sm outline-none focus:border-amber-400"
+                >
+
+                <ul class="text-[10px] font-bold text-slate-400 text-left pl-2 space-y-1 list-disc list-inside">
+                    <li id="rule-length" class="transition-colors">At least 8 characters</li>
+                    <li id="rule-upper" class="transition-colors">At least 1 uppercase letter</li>
+                    <li id="rule-num" class="transition-colors">At least 2 numbers</li>
+                    <li id="rule-match" class="transition-colors">Passwords must match</li>
+                </ul>
+
+                <button
+                    type="button"
+                    onclick="saveNewPassword()"
+                    class="w-full desi-gradient text-white py-4 rounded-xl font-bold mt-4 uppercase text-xs tracking-widest active:scale-95 transition-transform"
+                >
+                    Update Password
+                </button>
+            </div>
+        </div>
+
         <!-- VERIFIED POPUP -->
         <div id="verified-popup" class="hidden text-center py-10">
             <i class="fa-solid fa-circle-check text-7xl text-emerald-500 animate-bounce"></i>
-            <h2 class="text-3xl font-black text-slate-900 mt-6 tracking-tight">Verified Confirmed!</h2>
-            <p class="text-slate-500 text-sm mt-2 font-medium">Redirecting to profile setup...</p>
+
+            <h2 class="text-3xl font-black text-slate-900 mt-6 tracking-tight">
+                Verified
+            </h2>
+
+            <p id="verified-message" class="text-slate-500 text-sm mt-2 font-medium">
+                Your identity has been verified successfully.
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-8">
+                <button
+                    type="button"
+                    onclick="continueAfterVerification()"
+                    class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest transition"
+                >
+                    Continue
+                </button>
+
+                <button
+                    type="button"
+                    onclick="navigate('recovery')"
+                    class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 py-4 rounded-xl font-bold uppercase text-xs tracking-widest transition"
+                >
+                    Create New Password
+                </button>
+            </div>
         </div>
 
         <!-- PROFILE CONTAINER -->
@@ -1397,31 +1521,31 @@ body.dark-theme textarea {
                         <div class="grid grid-cols-2 gap-x-6 gap-y-8">
                             <div>
                                 <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block">Full Name</label>
-                                <p id="prof-disp-name" class="font-bold text-slate-800 text-lg">User</p>
+                                <p id="prof-disp-name" class="font-bold text-slate-800 text-lg">Loading profile...</p>
                             </div>
                             <div>
                                 <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block">Current Residence Location</label>
-                                <p id="prof-disp-loc" class="font-bold text-slate-800 text-lg">City, State</p>
+                                <p id="prof-disp-loc" class="font-bold text-slate-800 text-lg">Loading location...</p>
                             </div>
                             <div>
                                 <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block">Date of Birth</label>
-                                <p id="prof-disp-dob" class="font-bold text-slate-800 text-lg">August 3, 2004</p>
+                                <p id="prof-disp-dob" class="font-bold text-slate-800 text-lg">Not provided</p>
                             </div>
                             <div>
                                 <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block">Gmail Address</label>
-                                <p id="prof-disp-email" class="font-bold text-slate-800 text-lg">suryakondapally03@gmail.com</p>
+                                <p id="prof-disp-email" class="font-bold text-slate-800 text-lg">Loading email...</p>
                             </div>
                             <div class="col-span-2">
                                 <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block">Indian Origin State</label>
-                                <p id="prof-disp-origin" class="font-bold text-slate-800 text-lg">Telangana, India</p>
+                                <p id="prof-disp-origin" class="font-bold text-slate-800 text-lg">Not provided</p>
                             </div>
                             <div class="col-span-2">
                                 <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block">Profession</label>
-                                <p id="prof-disp-profession" class="font-bold text-slate-800 text-lg">Commercial Pilot / Developer</p>
+                                <p id="prof-disp-profession" class="font-bold text-slate-800 text-lg">Loading profession...</p>
                             </div>
                         </div>
                         <div class="mt-8 pt-8 border-t border-slate-100 flex justify-end">
-                            <button onclick="window.location.reload()" class="text-rose-500 font-bold hover:bg-rose-50 px-4 py-2 rounded-xl transition">Logout Profile</button>
+                            <button onclick="handleLogout()" class="text-rose-500 font-bold hover:bg-rose-50 px-4 py-2 rounded-xl transition">Logout Profile</button>
                         </div>
                     </div>
                 </div>
@@ -2033,27 +2157,104 @@ body.dark-theme textarea {
             };
 
             function updateFinalAvatar(role) {
-                const pic = document.getElementById('main-profile-pic');
-                const profPic = document.getElementById('profile-page-pic');
+                const pic =
+                    document.getElementById(
+                        'main-profile-pic'
+                    );
+
+                const profPic =
+                    document.getElementById(
+                        'profile-page-pic'
+                    );
+
                 if (avatarMap[role]) {
-                    if (pic) pic.src = avatarMap[role];
-                    if (profPic) profPic.src = avatarMap[role];
+                    if (pic) {
+                        pic.src =
+                            avatarMap[role];
+                    }
+
+                    if (profPic) {
+                        profPic.src =
+                            avatarMap[role];
+                    }
+
+                    persistAvatarForCurrentUser(
+                        avatarMap[role]
+                    );
                 }
+
                 closeAvatarModal();
             }
 
             function handleFileUpload(event) {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const pic = document.getElementById('main-profile-pic');
-                        const profPic = document.getElementById('profile-page-pic');
-                        if (pic) pic.src = e.target.result;
-                        if (profPic) profPic.src = e.target.result;
-                        closeAvatarModal();
-                    };
-                    reader.readAsDataURL(file);
+                const file =
+                    event.target.files[0];
+
+                if (!file) {
+                    return;
+                }
+
+                const reader =
+                    new FileReader();
+
+                reader.onload = function(e) {
+                    const avatarData =
+                        e.target.result;
+
+                    const pic =
+                        document.getElementById(
+                            'main-profile-pic'
+                        );
+
+                    const profPic =
+                        document.getElementById(
+                            'profile-page-pic'
+                        );
+
+                    if (pic) {
+                        pic.src =
+                            avatarData;
+                    }
+
+                    if (profPic) {
+                        profPic.src =
+                            avatarData;
+                    }
+
+                    persistAvatarForCurrentUser(
+                        avatarData
+                    );
+
+                    closeAvatarModal();
+                };
+
+                reader.readAsDataURL(file);
+            }
+
+            function persistAvatarForCurrentUser(
+                avatarValue
+            ) {
+                const authenticatedUser =
+                    window.auth &&
+                    window.auth.currentUser;
+
+                if (
+                    !authenticatedUser ||
+                    !avatarValue
+                ) {
+                    return;
+                }
+
+                try {
+                    localStorage.setItem(
+                        `hive_avatar_${authenticatedUser.uid}`,
+                        avatarValue
+                    );
+                } catch (error) {
+                    console.warn(
+                        "Avatar persistence failed:",
+                        error
+                    );
                 }
             }
 
@@ -2075,42 +2276,108 @@ body.dark-theme textarea {
 
             async function handleEditProfileSubmit(e) {
                 e.preventDefault();
-                const newName = document.getElementById('edit-p-name').value;
-                const newEmail = document.getElementById('edit-p-email').value;
-                const newCity = document.getElementById('edit-p-city').value;
-                const newProf = document.getElementById('edit-p-prof').value;
+
+                const newName =
+                    document.getElementById(
+                        'edit-p-name'
+                    ).value.trim();
+
+                const newEmail =
+                    document.getElementById(
+                        'edit-p-email'
+                    ).value.trim();
+
+                const newCity =
+                    document.getElementById(
+                        'edit-p-city'
+                    ).value.trim();
+
+                const newProf =
+                    document.getElementById(
+                        'edit-p-prof'
+                    ).value.trim();
+
+                const authenticatedUser =
+                    window.auth &&
+                    window.auth.currentUser;
+
+                if (!authenticatedUser) {
+                    triggerServerError(
+                        "Login Required",
+                        "Your profile can only be edited while you are authenticated."
+                    );
+                    return;
+                }
 
                 globalUser = newName;
+                globalEmail = newEmail;
                 globalCity = newCity;
-                document.getElementById('sidebar-user-name').innerText = newName;
-                document.getElementById('sidebar-user-loc').innerText = `${globalCity}, ${globalState}`;
-                document.getElementById('prof-disp-name').innerText = newName;
-                document.getElementById('prof-disp-email').innerText = newEmail;
-                document.getElementById('prof-disp-loc').innerText = `${globalCity}, ${globalState}, ${globalCountryName}`;
-                document.getElementById('prof-disp-profession').innerText = newProf;
 
-                // Auto-save to Firebase Firestore DB
+                updateProfileDisplay({
+                    name: newName,
+                    email: newEmail,
+                    city: newCity,
+                    state: globalState,
+                    country: globalCountryName,
+                    profession: newProf
+                });
+
                 try {
-                    if (window.db && window.addDoc) {
-                        await window.addDoc(window.collection(window.db, "userProfiles"), {
+                    await createOrUpdateUserProfile(
+                        authenticatedUser,
+                        {
                             name: newName,
                             email: newEmail,
                             city: newCity,
-                            profession: newProf,
                             state: globalState,
-                            timestamp: window.serverTimestamp ? window.serverTimestamp() : new Date()
-                        });
-                    }
-                } catch(err) {
-                    console.log("Profile updated successfully locally.", err);
+                            country: globalCountryName,
+                            profession: newProf
+                        }
+                    );
+
+                    await window.updateProfile(
+                        authenticatedUser,
+                        {
+                            displayName: newName
+                        }
+                    );
+
+                } catch (error) {
+                    console.error(
+                        "Profile update error:",
+                        error
+                    );
+
+                    triggerServerError(
+                        "Profile Save Error",
+                        "Your profile could not be synchronized with Firestore."
+                    );
+
+                    return;
                 }
 
                 closeEditProfileModal();
-                const toast = document.getElementById('otp-toast');
+
+                const toast =
+                    document.getElementById(
+                        'otp-toast'
+                    );
+
                 if (toast) {
-                    toast.querySelector('span').innerText = "✅ Profile updated and saved to DB!";
-                    toast.classList.add('toast-active');
-                    setTimeout(() => toast.classList.remove('toast-active'), 3000);
+                    toast.querySelector(
+                        'span'
+                    ).innerText =
+                        "✅ Profile updated and saved to your account.";
+
+                    toast.classList.add(
+                        'toast-active'
+                    );
+
+                    setTimeout(() => {
+                        toast.classList.remove(
+                            'toast-active'
+                        );
+                    }, 3000);
                 }
             }
 
@@ -2237,130 +2504,908 @@ body.dark-theme textarea {
                 }
             }
 
+            // ==========================================
+            // AUTHENTICATION / OTP / PASSWORD RECOVERY
+            // ==========================================
+
+            let authMode = 'login';
+            let pendingRegistration = null;
+            let otpVerified = false;
+            let profileListenerUnsubscribe = null;
+
             function toggleMode() {
                 isSignUp = !isSignUp;
+                authMode = isSignUp ? 'signup' : 'login';
+
                 const mainBtn = document.getElementById('main-btn');
                 const toggleText = document.getElementById('mode-toggle');
                 const nameInput = document.getElementById('reg-name');
                 const nameContainer = nameInput ? nameInput.closest('div') : null;
+                const forgotBtn = document.getElementById('forgot-pass-container');
 
                 if (isSignUp) {
                     mainBtn.innerText = "CREATE ACCOUNT";
                     toggleText.innerText = "Already have an account? Login";
-                    if (nameContainer) nameContainer.classList.remove('hidden');
+
+                    if (nameContainer) {
+                        nameContainer.classList.remove('hidden');
+                    }
+
+                    if (forgotBtn) {
+                        forgotBtn.classList.add('hidden');
+                    }
                 } else {
                     mainBtn.innerText = "CONTINUE";
                     toggleText.innerText = "Create New Account";
-                    if (nameContainer) nameContainer.classList.add('hidden');
+
+                    if (nameContainer) {
+                        nameContainer.classList.add('hidden');
+                    }
+
+                    if (forgotBtn) {
+                        forgotBtn.classList.remove('hidden');
+                    }
                 }
+
+                clearOTPInputs();
+                navigate('auth');
             }
 
             function togglePass() {
-                const p = document.getElementById('reg-pass');
-                p.type = p.type === 'password' ? 'text' : 'password';
-            }
+                const passwordInput = document.getElementById('reg-pass');
 
-           async function handleAuthSubmit(e) {
-                e.preventDefault();
-                const email = document.getElementById('reg-email').value;
-                const password = document.getElementById('reg-pass').value;
-
-                globalEmail = email;
-                
-                const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
-                if (!passwordRegex.test(password)) {
-                    triggerServerError("Invalid Password", "Password must be at least 8 characters long, and contain at least 1 capital letter and 1 number.");
-                    return; 
+                if (!passwordInput) {
+                    return;
                 }
 
-                document.getElementById('display-gmail').innerText = email;
-                const mainBtn = document.getElementById('main-btn');
-                const originalText = mainBtn.innerText;
-                mainBtn.innerText = "AUTHENTICATING...";
+                passwordInput.type =
+                    passwordInput.type === 'password'
+                        ? 'text'
+                        : 'password';
+            }
+
+            function isValidEmail(email) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            }
+
+            function isStrongRegistrationPassword(password) {
+                const hasLength = password.length >= 8;
+                const hasUpper = /[A-Z]/.test(password);
+                const hasTwoNumbers =
+                    (password.match(/\d/g) || []).length >= 2;
+
+                return hasLength && hasUpper && hasTwoNumbers;
+            }
+
+            function getAuthErrorMessage(error) {
+                if (!error || !error.code) {
+                    return "Authentication failed. Please try again.";
+                }
+
+                switch (error.code) {
+                    case 'auth/user-not-found':
+                        return "No Desi Hive account exists for this email.";
+
+                    case 'auth/wrong-password':
+                    case 'auth/invalid-credential':
+                        return "Incorrect email or password. Access denied.";
+
+                    case 'auth/invalid-email':
+                        return "The email address is invalid.";
+
+                    case 'auth/email-already-in-use':
+                        return "This email is already registered. Please login.";
+
+                    case 'auth/weak-password':
+                        return "Firebase rejected the password because it is too weak.";
+
+                    case 'auth/too-many-requests':
+                        return "Too many attempts. Please wait and try again.";
+
+                    case 'auth/network-request-failed':
+                        return "Network error. Check your internet connection.";
+
+                    default:
+                        return error.message || "Authentication failed. Please try again.";
+                }
+            }
+
+            function startForgotPassword() {
+                const emailInput = document.getElementById('reg-email');
+                const email =
+                    emailInput
+                        ? emailInput.value.trim().toLowerCase()
+                        : '';
+
+                if (!email) {
+                    triggerServerError(
+                        "Email Required",
+                        "Enter your Gmail address first to recover your password."
+                    );
+                    return;
+                }
+
+                if (!isValidEmail(email)) {
+                    triggerServerError(
+                        "Invalid Email",
+                        "Please enter a valid email address."
+                    );
+                    return;
+                }
+
+                authMode = 'forgot';
+                isSignUp = false;
+                globalEmail = email;
+                otpVerified = false;
+
+                sendOTPLogic(
+                    email,
+                    "Hive Member"
+                );
+            }
+
+            async function handleAuthSubmit(e) {
+                e.preventDefault();
+
+                const emailInput =
+                    document.getElementById('reg-email');
+
+                const passwordInput =
+                    document.getElementById('reg-pass');
+
+                const email =
+                    emailInput
+                        ? emailInput.value.trim().toLowerCase()
+                        : '';
+
+                const password =
+                    passwordInput
+                        ? passwordInput.value
+                        : '';
+
+                globalEmail = email;
+
+                if (!isValidEmail(email)) {
+                    triggerServerError(
+                        "Invalid Email",
+                        "Please enter a valid email address."
+                    );
+                    return;
+                }
+
+                if (!password) {
+                    triggerServerError(
+                        "Password Required",
+                        "Enter your password to continue."
+                    );
+                    return;
+                }
+
+                if (
+                    authMode === 'signup' &&
+                    !isStrongRegistrationPassword(password)
+                ) {
+                    triggerServerError(
+                        "Invalid Password",
+                        "Password must be 8+ characters, contain at least 1 uppercase letter, and contain at least 2 numbers."
+                    );
+                    return;
+                }
+
+                const mainBtn =
+                    document.getElementById('main-btn');
+
+                const originalText =
+                    mainBtn.innerText;
+
+                mainBtn.innerText =
+                    "AUTHENTICATING...";
+
                 mainBtn.disabled = true;
 
                 try {
-                    if (!isSignUp) {
-                        // REAL FIREBASE LOGIN
-                        const userCredential = await window.signInWithEmailAndPassword(window.auth, email, password);
-                        globalUser = userCredential.user.displayName || email.split('@')[0];
-                        document.getElementById('sidebar-user-name').innerText = globalUser;
-                        handleProfileFinal(e, true);
-                    } else {
-                        // REAL FIREBASE SIGNUP
-                        const name = document.getElementById('reg-name').value || email.split('@')[0];
-                        const userCredential = await window.createUserWithEmailAndPassword(window.auth, email, password);
-                        await window.updateProfile(userCredential.user, { displayName: name });
+                    if (authMode === 'login') {
+                        /*
+                         * STRICT FIREBASE LOGIN.
+                         *
+                         * There is no local/demo user fallback here.
+                         * Firebase must approve the exact credentials.
+                         */
+                        const userCredential =
+                            await window.signInWithEmailAndPassword(
+                                window.auth,
+                                email,
+                                password
+                            );
+
+                        const authenticatedUser =
+                            userCredential.user;
+
+                        globalEmail =
+                            authenticatedUser.email || email;
+
+                        globalUser =
+                            authenticatedUser.displayName ||
+                            email.split('@')[0];
+
+                        await loadAuthenticatedUserProfile(
+                            authenticatedUser
+                        );
+
+                        document.getElementById(
+                            'sidebar-user-name'
+                        ).innerText = globalUser;
+
+                        handleProfileFinal(
+                            e,
+                            true
+                        );
+
+                    } else if (authMode === 'signup') {
+                        /*
+                         * DO NOT create the Firebase account yet.
+                         *
+                         * Registration is stored temporarily and the account
+                         * is created only after OTP verification succeeds.
+                         */
+                        const nameInput =
+                            document.getElementById('reg-name');
+
+                        const name =
+                            nameInput &&
+                            nameInput.value.trim()
+                                ? nameInput.value.trim()
+                                : email.split('@')[0];
+
+                        pendingRegistration = {
+                            name: name,
+                            email: email,
+                            password: password
+                        };
+
                         globalUser = name;
-                        
-                        // GENERATE REAL 4-DIGIT OTP
-                        window.generatedOTP = Math.floor(1000 + Math.random() * 9000).toString();
-                        console.log("DEV MODE - Your OTP is: " + window.generatedOTP); 
-                        
-                        // SEND OTP VIA EMAILJS (Your real keys are here!)
-                        if (typeof emailjs !== 'undefined') {
-                            emailjs.send("service_6dbe39s", "template_n54oosp", {
-                                to_email: email,
-                                to_name: name,
-                                otp_code: window.generatedOTP,
-                                message: `Your Desi Hive verification code is ${window.generatedOTP}`
-                            }).catch(err => console.log("EmailJS warning:", err));
-                        }
-                        
-                        navigate('otp');
-                        startResendTimer();
-                        const toast = document.getElementById('otp-toast');
-                        if (toast) {
-                            toast.querySelector('span').innerText = "Account Created! Verification code sent.";
-                            toast.classList.add('toast-active');
-                            setTimeout(() => toast.classList.remove('toast-active'), 3000);
-                        }
+
+                        await sendOTPLogic(
+                            email,
+                            name
+                        );
                     }
+
                 } catch (error) {
-                    console.error("Auth Error:", error);
-                    let errorMsg = "Authentication failed.";
-                    if (error.code === 'auth/email-already-in-use') errorMsg = "This email is already registered. Please login.";
-                    if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') errorMsg = "Incorrect email or password.";
-                    triggerServerError("Auth Error", errorMsg);
+                    console.error(
+                        "Auth Error:",
+                        error
+                    );
+
+                    triggerServerError(
+                        "Auth Error",
+                        getAuthErrorMessage(error)
+                    );
+
                 } finally {
-                    mainBtn.innerText = originalText;
-                    mainBtn.disabled = false;
+                    mainBtn.innerText =
+                        originalText;
+
+                    mainBtn.disabled =
+                        false;
+                }
+            }
+
+            async function sendOTPLogic(
+                email,
+                name
+            ) {
+                window.generatedOTP =
+                    Math.floor(
+                        1000 +
+                        Math.random() * 9000
+                    ).toString();
+
+                window.otpGeneratedAt =
+                    Date.now();
+
+                console.log(
+                    "DEV MODE OTP:",
+                    window.generatedOTP
+                );
+
+                const emailPayload = {
+                    to_email: email,
+                    to_name: name,
+                    otp_code: window.generatedOTP,
+                    message:
+                        `Your Desi Hive verification code is ${window.generatedOTP}`
+                };
+
+                let emailSent = false;
+
+                /*
+                 * Existing EmailJS configuration is preserved.
+                 */
+                if (
+                    typeof emailjs !== 'undefined'
+                ) {
+                    try {
+                        await emailjs.send(
+                            "service_6dbe39s",
+                            "template_n54oosp",
+                            emailPayload
+                        );
+
+                        emailSent = true;
+
+                    } catch (error) {
+                        console.error(
+                            "EmailJS OTP error:",
+                            error
+                        );
+                    }
+                }
+
+                /*
+                 * If EmailJS is not available or failed, fall back to the
+                 * existing backend OTP endpoint.
+                 *
+                 * Only one delivery path is used for each OTP request so
+                 * the user does not receive duplicate codes.
+                 */
+                if (!emailSent) {
+                    try {
+                        const response =
+                            await fetch(
+                                '/api/send-otp',
+                                {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type':
+                                            'application/json'
+                                    },
+                                    body:
+                                        JSON.stringify({
+                                            email: email,
+                                            name: name,
+                                            otp: window.generatedOTP
+                                        })
+                                }
+                            );
+
+                        if (response.ok) {
+                            emailSent = true;
+                        }
+
+                    } catch (error) {
+                        console.warn(
+                            "Backend OTP endpoint unavailable:",
+                            error
+                        );
+                    }
+                }
+
+                if (!emailSent) {
+                    triggerServerError(
+                        "OTP Delivery Failed",
+                        "We could not send the verification code. Check your EmailJS configuration or backend OTP endpoint."
+                    );
+                    return;
+                }
+
+                document.getElementById(
+                    'display-gmail'
+                ).innerText = email;
+
+                clearOTPInputs();
+
+                navigate('otp');
+
+                startResendTimer();
+
+                const toast =
+                    document.getElementById(
+                        'otp-toast'
+                    );
+
+                if (toast) {
+                    toast.querySelector(
+                        'span'
+                    ).innerText =
+                        "OTP was sent to your Gmail!";
+
+                    toast.classList.add(
+                        'toast-active'
+                    );
+
+                    setTimeout(() => {
+                        toast.classList.remove(
+                            'toast-active'
+                        );
+                    }, 3000);
                 }
             }
 
             async function verifyOTP() {
-    const inputs = document.querySelectorAll('.otp-input');
-    const otp = Array.from(inputs).map(i => i.value).join('');
-    const errorHint = document.getElementById('otp-error-hint');
+                const inputs =
+                    document.querySelectorAll(
+                        '.otp-input'
+                    );
 
-    if (otp.length < 4) {
-        errorHint.textContent = "Please enter all 4 digits.";
-        errorHint.classList.remove('hidden');
-        errorHint.classList.add('text-red-500');
-        return;
+                const otp =
+                    Array.from(inputs)
+                        .map(input => input.value)
+                        .join('');
+
+                const errorHint =
+                    document.getElementById(
+                        'otp-error-hint'
+                    );
+
+                if (otp.length !== 4) {
+                    errorHint.textContent =
+                        "Please enter all 4 digits.";
+
+                    errorHint.classList.remove(
+                        'hidden',
+                        'text-emerald-500'
+                    );
+
+                    errorHint.classList.add(
+                        'text-red-500'
+                    );
+
+                    return;
+                }
+
+                if (
+                    !window.generatedOTP ||
+                    otp !== window.generatedOTP
+                ) {
+                    errorHint.textContent =
+                        "Incorrect OTP. Please check your email.";
+
+                    errorHint.classList.remove(
+                        'hidden',
+                        'text-emerald-500'
+                    );
+
+                    errorHint.classList.add(
+                        'text-red-500'
+                    );
+
+                    clearOTPInputs();
+
+                    const firstInput =
+                        document.querySelector(
+                            '.otp-input'
+                        );
+
+                    if (firstInput) {
+                        firstInput.focus();
+                    }
+
+                    return;
+                }
+
+                otpVerified = true;
+
+                errorHint.textContent =
+                    "HURRAY! Verified!";
+
+                errorHint.classList.remove(
+                    'hidden',
+                    'text-red-500'
+                );
+
+                errorHint.classList.add(
+                    'text-emerald-500'
+                );
+
+                clearInterval(
+                    countdown
+                );
+
+                const resendButton =
+                    document.getElementById(
+                        'resend-btn'
+                    );
+
+                if (resendButton) {
+                    resendButton.disabled =
+                        true;
+                }
+
+                if (authMode === 'signup') {
+                    try {
+                        if (!pendingRegistration) {
+                            throw new Error(
+                                "Registration session expired. Please start again."
+                            );
+                        }
+
+                        /*
+                         * Firebase account creation happens here and nowhere
+                         * before this successful OTP verification.
+                         */
+                        const userCredential =
+                            await window.createUserWithEmailAndPassword(
+                                window.auth,
+                                pendingRegistration.email,
+                                pendingRegistration.password
+                            );
+
+                        const firebaseUser =
+                            userCredential.user;
+
+                        await window.updateProfile(
+                            firebaseUser,
+                            {
+                                displayName:
+                                    pendingRegistration.name
+                            }
+                        );
+
+                        globalEmail =
+                            firebaseUser.email ||
+                            pendingRegistration.email;
+
+                        globalUser =
+                            pendingRegistration.name;
+
+                        await createOrUpdateUserProfile(
+                            firebaseUser,
+                            {
+                                name:
+                                    pendingRegistration.name,
+                                email:
+                                    globalEmail
+                            }
+                        );
+
+                        document.getElementById(
+                            'verified-message'
+                        ).innerText =
+                            "Your email has been verified and your account is ready.";
+
+                        pendingRegistration =
+                            null;
+
+                        navigate(
+                            'verified'
+                        );
+
+                    } catch (error) {
+                        console.error(
+                            "Registration Error:",
+                            error
+                        );
+
+                        triggerServerError(
+                            "Registration Error",
+                            getAuthErrorMessage(
+                                error
+                            )
+                        );
+                    }
+
+                    return;
+                }
+
+                if (authMode === 'forgot') {
+                    document.getElementById(
+                        'verified-message'
+                    ).innerText =
+                        "Your identity has been verified. Choose what you want to do next.";
+
+                    navigate(
+                        'verified'
+                    );
+                }
+            }
+
+           async function continueAfterVerification() {
+    try {
+        // 1. Ask the backend for a secure login token using the globalEmail
+        const response = await fetch('/api/login-after-otp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: globalEmail })
+        });
+        
+        const data = await response.json();
+
+        if (data.success && data.customToken) {
+            // 2. Sign in using the Firebase Client SDK
+            const userCredential = await window.signInWithCustomToken(window.getAuth(), data.customToken);
+            const authenticatedUser = userCredential.user;
+
+            // 3. Run your existing profile setup
+            await loadAuthenticatedUserProfile(authenticatedUser);
+            
+            globalUser = authenticatedUser.displayName || globalEmail.split('@')[0];
+            
+            handleProfileFinal(null, true);
+        } else {
+            // If the backend rejects it (e.g., user not found in database)
+            triggerServerError("Login Failed", data.error || "Could not log in with this email.");
+        }
+        
+    } catch (error) {
+        console.error("OTP login error:", error);
+        triggerServerError("Connection Error", "Could not connect to the backend server.");
     }
-
-    // Verify against the generated OTP stored during sign-up
-    if (otp !== window.generatedOTP) {
-        errorHint.textContent = "Incorrect OTP. Please check your email.";
-        errorHint.classList.remove('hidden');
-        errorHint.classList.add('text-red-500');
-        inputs.forEach(i => i.value = '');
-        inputs[0].focus();
-        return;
-    }
-
-    errorHint.textContent = "HURRAY! Verified!";
-    errorHint.classList.remove('hidden', 'text-red-500');
-    errorHint.classList.add('text-emerald-500');
-
-    setTimeout(() => {
-        errorHint.classList.add('hidden');
-        navigate('profile');
-        const email = document.getElementById('reg-email').value;
-        document.getElementById('p-name').value = document.getElementById('reg-name').value || email.split('@')[0];
-    }, 1200);
 }
+
+            function checkPasswordRules() {
+                const first =
+                    document.getElementById(
+                        'new-pass-1'
+                    ).value;
+
+                const second =
+                    document.getElementById(
+                        'new-pass-2'
+                    ).value;
+
+                setPasswordRuleState(
+                    'rule-length',
+                    first.length >= 8
+                );
+
+                setPasswordRuleState(
+                    'rule-upper',
+                    /[A-Z]/.test(first)
+                );
+
+                setPasswordRuleState(
+                    'rule-num',
+                    (
+                        first.match(
+                            /\d/g
+                        ) || []
+                    ).length >= 2
+                );
+
+                setPasswordRuleState(
+                    'rule-match',
+                    first === second &&
+                    first !== ''
+                );
+            }
+
+            function setPasswordRuleState(
+                id,
+                passed
+            ) {
+                const element =
+                    document.getElementById(id);
+
+                if (!element) {
+                    return;
+                }
+
+                element.style.color =
+                    passed
+                        ? '#10b981'
+                        : '#94a3b8';
+            }
+
+            async function saveNewPassword() {
+                const first =
+                    document.getElementById(
+                        'new-pass-1'
+                    ).value;
+
+                const second =
+                    document.getElementById(
+                        'new-pass-2'
+                    ).value;
+
+                const valid =
+                    first.length >= 8 &&
+                    /[A-Z]/.test(first) &&
+                    (
+                        first.match(
+                            /\d/g
+                        ) || []
+                    ).length >= 2 &&
+                    first === second &&
+                    first !== '';
+
+                if (!valid) {
+                    triggerServerError(
+                        "Invalid Password",
+                        "Please make every security rule turn green and make sure both passwords match."
+                    );
+                    return;
+                }
+
+                /*
+                 * Already-authenticated users can use Firebase's direct
+                 * password update API.
+                 */
+                if (
+                    window.auth &&
+                    window.auth.currentUser
+                ) {
+                    try {
+                        await window.updatePassword(
+                            window.auth.currentUser,
+                            first
+                        );
+
+                        showPasswordUpdatedMessage();
+
+                        return;
+
+                    } catch (error) {
+                        console.error(
+                            "Direct password update failed:",
+                            error
+                        );
+                    }
+                }
+
+                /*
+                 * Password recovery after OTP requires a secure backend.
+                 * The browser cannot safely change another user's Firebase
+                 * password using only a client-side OTP.
+                 */
+                try {
+                    const response =
+                        await fetch(
+                            '/api/reset-password-after-otp',
+                            {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type':
+                                        'application/json'
+                                },
+                                body:
+                                    JSON.stringify({
+                                        email:
+                                            globalEmail,
+                                        password:
+                                            first
+                                    })
+                            }
+                        );
+
+                    if (!response.ok) {
+                        throw new Error(
+                            "Password reset endpoint rejected the request."
+                        );
+                    }
+
+                    showPasswordUpdatedMessage();
+
+                } catch (error) {
+                    console.error(
+                        "Password recovery error:",
+                        error
+                    );
+
+                    triggerServerError(
+                        "Password Reset Setup Required",
+                        "The password rules are working, but /api/reset-password-after-otp must be connected to Firebase Admin SDK before an OTP can securely change a Firebase password."
+                    );
+                }
+            }
+
+            function showPasswordUpdatedMessage() {
+                const recoveryContainer =
+                    document.getElementById(
+                        'recovery-container'
+                    );
+
+                if (!recoveryContainer) {
+                    return;
+                }
+
+                recoveryContainer.innerHTML = `
+                    <i class="fa-solid fa-circle-check text-6xl text-emerald-500 mb-4 animate-bounce"></i>
+
+                    <h3 class="text-2xl font-black text-slate-800">
+                        Password Updated
+                    </h3>
+
+                    <p class="text-xs text-slate-500 mt-2">
+                        Your new password has been saved successfully.
+                    </p>
+
+                    <button
+                        onclick="returnToLoginAfterPasswordReset()"
+                        class="mt-8 w-full desi-gradient text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest"
+                    >
+                        Back to Login
+                    </button>
+                `;
+            }
+
+            function returnToLoginAfterPasswordReset() {
+                authMode = 'login';
+                isSignUp = false;
+                otpVerified = false;
+                pendingRegistration = null;
+
+                const emailInput =
+                    document.getElementById(
+                        'reg-email'
+                    );
+
+                if (emailInput) {
+                    emailInput.value =
+                        globalEmail;
+                }
+
+                const passwordInput =
+                    document.getElementById(
+                        'reg-pass'
+                    );
+
+                if (passwordInput) {
+                    passwordInput.value = '';
+                }
+
+                navigate(
+                    'auth'
+                );
+
+                const mainBtn =
+                    document.getElementById(
+                        'main-btn'
+                    );
+
+                const toggleText =
+                    document.getElementById(
+                        'mode-toggle'
+                    );
+
+                const nameInput =
+                    document.getElementById(
+                        'reg-name'
+                    );
+
+                const nameContainer =
+                    nameInput
+                        ? nameInput.closest('div')
+                        : null;
+
+                const forgotBtn =
+                    document.getElementById(
+                        'forgot-pass-container'
+                    );
+
+                if (mainBtn) {
+                    mainBtn.innerText =
+                        "CONTINUE";
+                }
+
+                if (toggleText) {
+                    toggleText.innerText =
+                        "Create New Account";
+                }
+
+                if (nameContainer) {
+                    nameContainer.classList.add(
+                        'hidden'
+                    );
+                }
+
+                if (forgotBtn) {
+                    forgotBtn.classList.remove(
+                        'hidden'
+                    );
+                }
+            }
+
+            function clearOTPInputs() {
+                document
+                    .querySelectorAll(
+                        '.otp-input'
+                    )
+                    .forEach(input => {
+                        input.value = '';
+                    });
+            }
+
             function getEventColor(type) {
                 if (type === 'Sports') return 'bg-orange-100 text-orange-600';
                 if (type === 'Education') return 'bg-blue-100 text-blue-600';
@@ -2598,20 +3643,76 @@ body.dark-theme textarea {
                     }
                 }
                 if (tabId === 'profile') {
-                    document.getElementById('prof-disp-name').innerText = globalUser;
-                    document.getElementById('prof-disp-loc').innerText = `${globalCity}, ${globalState}, ${globalCountryName}`;
-                    document.getElementById('prof-disp-origin').innerText = `${globalHomeState}, India`;
+                    const authenticatedUser =
+                        window.auth &&
+                        window.auth.currentUser;
+
+                    if (authenticatedUser) {
+                        loadAuthenticatedUserProfile(
+                            authenticatedUser
+                        );
+                    } else {
+                        clearProfileDisplay();
+                    }
                 }
             }
 
             function navigate(to) {
                 step = to;
-                if (navigationHistoryStack[navigationHistoryStack.length - 1] !== to) navigationHistoryStack.push(to);
-                const views = ['auth-container', 'otp-container', 'profile-container', 'verified-popup'];
-                views.forEach(id => document.getElementById(id).classList.add('hidden'));
-                const targetId = to === 'verified' ? 'verified-popup' : to + '-container';
-                document.getElementById(targetId).classList.remove('hidden');
-                document.getElementById('back-btn').classList.toggle('hidden', to === 'auth' || to === 'verified');
+
+                if (
+                    navigationHistoryStack[
+                        navigationHistoryStack.length - 1
+                    ] !== to
+                ) {
+                    navigationHistoryStack.push(to);
+                }
+
+                const views = [
+                    'auth-container',
+                    'otp-container',
+                    'profile-container',
+                    'verified-popup',
+                    'recovery-container'
+                ];
+
+                views.forEach(id => {
+                    const element =
+                        document.getElementById(id);
+
+                    if (element) {
+                        element.classList.add('hidden');
+                    }
+                });
+
+                const targetId =
+                    to === 'verified'
+                        ? 'verified-popup'
+                        : `${to}-container`;
+
+                const targetElement =
+                    document.getElementById(
+                        targetId
+                    );
+
+                if (targetElement) {
+                    targetElement.classList.remove(
+                        'hidden'
+                    );
+                }
+
+                const backButton =
+                    document.getElementById(
+                        'back-btn'
+                    );
+
+                if (backButton) {
+                    backButton.classList.toggle(
+                        'hidden',
+                        to === 'auth' ||
+                        to === 'verified'
+                    );
+                }
             }
 
             function handleBack() {
@@ -2619,76 +3720,799 @@ body.dark-theme textarea {
                     navigationHistoryStack.pop();
                     const previousStep = navigationHistoryStack[navigationHistoryStack.length - 1];
                     step = previousStep;
-                    const views = ['auth-container', 'otp-container', 'profile-container', 'verified-popup'];
-                    views.forEach(id => document.getElementById(id).classList.add('hidden'));
-                    const targetId = previousStep === 'verified' ? 'verified-popup' : previousStep + '-container';
-                    document.getElementById(targetId).classList.remove('hidden');
-                    document.getElementById('back-btn').classList.toggle('hidden', previousStep === 'auth' || previousStep === 'verified');
+                    const views = [
+                        'auth-container',
+                        'otp-container',
+                        'profile-container',
+                        'verified-popup',
+                        'recovery-container'
+                    ];
+
+                    views.forEach(id => {
+                        const element =
+                            document.getElementById(id);
+
+                        if (element) {
+                            element.classList.add('hidden');
+                        }
+                    });
+
+                    const targetId =
+                        previousStep === 'verified'
+                            ? 'verified-popup'
+                            : `${previousStep}-container`;
+
+                    const targetElement =
+                        document.getElementById(
+                            targetId
+                        );
+
+                    if (targetElement) {
+                        targetElement.classList.remove(
+                            'hidden'
+                        );
+                    }
+
+                    const backButton =
+                        document.getElementById(
+                            'back-btn'
+                        );
+
+                    if (backButton) {
+                        backButton.classList.toggle(
+                            'hidden',
+                            previousStep === 'auth' ||
+                            previousStep === 'verified'
+                        );
+                    }
                 } else {
                     navigate('auth');
                 }
             }
 
-        async function handleProfileFinal(e, bypass = false) {
-    console.log("1. Enter Dashboard button clicked!");
-    if (e) e.preventDefault();
+        async function handleProfileFinal(
+            e,
+            bypass = false
+        ) {
+            console.log(
+                "1. Enter Dashboard button clicked!"
+            );
 
-    if (!bypass) {
-        console.log("2. Processing profile data...");
-        const countrySelect = document.getElementById('country-select');
-        globalCountryName = countrySelect.options[countrySelect.selectedIndex]?.text || "India";
-        globalState = document.getElementById('state-search').value || "Telangana";
-        globalCity = document.getElementById('city-search').value || "Hyderabad";
-        globalUser = document.getElementById('p-name').value || globalUser;
-        const userEmail = document.getElementById('reg-email').value;
-        const profVal = document.getElementById('prof-search').value || "Student";
+            if (e) {
+                e.preventDefault();
+            }
 
-        const userData = {
-            name: globalUser,
-            email: globalEmail,
-            profession: profVal,
-            country: globalCountryName,
-            state: globalState,
-            city: globalCity,
-            timestamp: new Date()
-        };
+            const authenticatedUser =
+                window.auth &&
+                window.auth.currentUser;
 
-        // Save living country ISO for the transition flag
-        localStorage.setItem('hive_living_iso2', selectedCountryCode.toLowerCase() || 'in');
+            if (!authenticatedUser) {
+                triggerServerError(
+                    "Authentication Required",
+                    "Please login with a real Firebase account before entering Desi Hive."
+                );
+                return;
+            }
 
-        // Save profile to Firestore DB if connected
-        if (window.db && window.addDoc) {
-            window.addDoc(window.collection(window.db, "userProfiles"), userData)
-                .then(() => console.log("4. Successfully saved to Firebase!"))
-                .catch(err => console.error("DB Save Error:", err));
+            if (!bypass) {
+                const countrySelect =
+                    document.getElementById(
+                        'country-select'
+                    );
+
+                if (
+                    countrySelect &&
+                    countrySelect.selectedIndex >= 0
+                ) {
+                    globalCountryName =
+                        countrySelect.options[
+                            countrySelect.selectedIndex
+                        ]?.text ||
+                        "India";
+                }
+
+                globalState =
+                    document.getElementById(
+                        'state-search'
+                    ).value ||
+                    "Telangana";
+
+                globalCity =
+                    document.getElementById(
+                        'city-search'
+                    ).value ||
+                    "Hyderabad";
+
+                globalUser =
+                    document.getElementById(
+                        'p-name'
+                    ).value ||
+                    globalUser ||
+                    authenticatedUser.displayName ||
+                    authenticatedUser.email.split('@')[0];
+
+                globalEmail =
+                    authenticatedUser.email ||
+                    globalEmail;
+
+                const userData = {
+                    name: globalUser,
+
+                    email: globalEmail,
+
+                    profession:
+                        document.getElementById(
+                            'prof-search'
+                        ).value ||
+                        "Student",
+
+                    country:
+                        globalCountryName,
+
+                    state:
+                        globalState,
+
+                    city:
+                        globalCity,
+
+                    dob:
+                        document.getElementById(
+                            'p-dob'
+                        ).value ||
+                        "",
+
+                    gender:
+                        document.getElementById(
+                            'p-gender'
+                        ).value ||
+                        "",
+
+                    education:
+                        document.getElementById(
+                            'edu-search'
+                        ).value ||
+                        "",
+
+                    originState:
+                        globalHomeState,
+
+                    countryCode:
+                        (
+                            selectedCountryCode ||
+                            globalCountryCode ||
+                            'in'
+                        ).toLowerCase(),
+
+                    updatedAt:
+                        window.serverTimestamp
+                            ? window.serverTimestamp()
+                            : new Date()
+                };
+
+                localStorage.setItem(
+                    'hive_living_iso2',
+                    userData.countryCode
+                );
+
+                try {
+                    await createOrUpdateUserProfile(
+                        authenticatedUser,
+                        userData
+                    );
+
+                    console.log(
+                        "Profile saved using authenticated UID."
+                    );
+
+                } catch (error) {
+                    console.error(
+                        "DB Save Error:",
+                        error
+                    );
+
+                    triggerServerError(
+                        "Profile Save Error",
+                        "Your Firebase account is authenticated, but your profile could not be saved. Check your Firestore rules."
+                    );
+
+                    return;
+                }
+
+                /*
+                 * Existing welcome email integration remains active.
+                 */
+                fetch(
+                    '/api/welcome',
+                    {
+                        method: 'POST',
+
+                        headers: {
+                            'Content-Type':
+                                'application/json'
+                        },
+
+                        body:
+                            JSON.stringify({
+                                email: globalEmail,
+                                name: globalUser,
+                                city: globalCity,
+                                state: globalState
+                            })
+                    }
+                ).catch(error =>
+                    console.error(
+                        "Welcome email dispatch error:",
+                        error
+                    )
+                );
+
+            } else {
+                await loadAuthenticatedUserProfile(
+                    authenticatedUser
+                );
+
+                if (
+                    !localStorage.getItem(
+                        'hive_living_iso2'
+                    )
+                ) {
+                    localStorage.setItem(
+                        'hive_living_iso2',
+                        (
+                            globalCountryCode ||
+                            'in'
+                        ).toLowerCase()
+                    );
+                }
+            }
+
+            initializeLocationRooms();
+
+            updateProfileDisplay({
+                name: globalUser,
+
+                email: globalEmail,
+
+                city: globalCity,
+
+                state: globalState,
+
+                country: globalCountryName,
+
+                profession:
+                    document.getElementById(
+                        'prof-disp-profession'
+                    )?.innerText ||
+                    'Community Member'
+            });
+
+            const sidebarName =
+                document.getElementById(
+                    'sidebar-user-name'
+                );
+
+            const sidebarLocation =
+                document.getElementById(
+                    'sidebar-user-loc'
+                );
+
+            if (sidebarName) {
+                sidebarName.innerText =
+                    globalUser;
+            }
+
+            if (sidebarLocation) {
+                sidebarLocation.innerText =
+                    `${globalCity}, ${globalState}`;
+            }
+
+            const userCountryIso2 =
+                localStorage.getItem(
+                    'hive_living_iso2'
+                ) ||
+                'in';
+
+            console.log(
+                "5. Triggering transition scene now..."
+            );
+
+            triggerGlobalMigration(
+                userCountryIso2
+            );
         }
 
-        // TRIGGER WELCOME EMAIL VIA BACKEND SERVER
-        fetch('/api/welcome', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                email: userEmail,
-                name: globalUser,
-                city: globalCity,
-                state: globalState
-            })
-        }).catch(err => console.error("Welcome email dispatch error:", err));
-    } else {
-        console.log("2b. Bypassing profile form (Login mode).");
-        if (!localStorage.getItem('hive_living_iso2')) localStorage.setItem('hive_living_iso2', 'in');
-    }
+        async function createOrUpdateUserProfile(
+            authenticatedUser,
+            profileData = {}
+        ) {
+            if (
+                !window.db ||
+                !window.doc ||
+                !window.setDoc
+            ) {
+                throw new Error(
+                    "Firestore is not ready."
+                );
+            }
 
-    initializeLocationRooms();
-    document.getElementById('sidebar-user-name').innerText = globalUser;
-    document.getElementById('sidebar-user-loc').innerText = `${globalCity}, ${globalState}`;
+            const uid =
+                authenticatedUser.uid;
 
-    const userCountryIso2 = localStorage.getItem('hive_living_iso2') || 'in';
-    console.log("5. Triggering transition scene now...");
-    triggerGlobalMigration(userCountryIso2);
-}
+            if (!uid) {
+                throw new Error(
+                    "Authenticated Firebase user has no UID."
+                );
+            }
 
-          function triggerGlobalMigration(livingIso2) {
+            const profileRef =
+                window.doc(
+                    window.db,
+                    "userProfiles",
+                    uid
+                );
+
+            const cleanProfile = {
+                uid: uid,
+
+                name:
+                    profileData.name ||
+                    authenticatedUser.displayName ||
+                    globalUser ||
+                    "Hive Member",
+
+                email:
+                    authenticatedUser.email ||
+                    profileData.email ||
+                    globalEmail ||
+                    "",
+
+                profession:
+                    profileData.profession ||
+                    "Community Member",
+
+                country:
+                    profileData.country ||
+                    globalCountryName ||
+                    "India",
+
+                state:
+                    profileData.state ||
+                    globalState ||
+                    "",
+
+                city:
+                    profileData.city ||
+                    globalCity ||
+                    "",
+
+                dob:
+                    profileData.dob ||
+                    "",
+
+                gender:
+                    profileData.gender ||
+                    "",
+
+                education:
+                    profileData.education ||
+                    "",
+
+                originState:
+                    profileData.originState ||
+                    globalHomeState ||
+                    "",
+
+                countryCode:
+                    (
+                        profileData.countryCode ||
+                        globalCountryCode ||
+                        'in'
+                    ).toLowerCase(),
+
+                updatedAt:
+                    profileData.updatedAt ||
+                    (
+                        window.serverTimestamp
+                            ? window.serverTimestamp()
+                            : new Date()
+                    )
+            };
+
+            await window.setDoc(
+                profileRef,
+                cleanProfile,
+                {
+                    merge: true
+                }
+            );
+
+            return cleanProfile;
+        }
+
+        async function loadAuthenticatedUserProfile(
+            authenticatedUser
+        ) {
+            if (
+                !authenticatedUser ||
+                !window.db ||
+                !window.doc ||
+                !window.getDoc
+            ) {
+                return null;
+            }
+
+            try {
+                const profileRef =
+                    window.doc(
+                        window.db,
+                        "userProfiles",
+                        authenticatedUser.uid
+                    );
+
+                const profileSnapshot =
+                    await window.getDoc(
+                        profileRef
+                    );
+
+                if (
+                    profileSnapshot.exists()
+                ) {
+                    applyAuthenticatedProfile(
+                        authenticatedUser,
+                        profileSnapshot.data()
+                    );
+
+                } else {
+                    applyAuthenticatedProfile(
+                        authenticatedUser,
+                        {
+                            name:
+                                authenticatedUser.displayName ||
+                                authenticatedUser.email.split('@')[0],
+
+                            email:
+                                authenticatedUser.email ||
+                                "",
+
+                            profession:
+                                "Community Member"
+                        }
+                    );
+                }
+
+                subscribeToAuthenticatedProfile(
+                    authenticatedUser
+                );
+
+                return profileSnapshot.exists()
+                    ? profileSnapshot.data()
+                    : null;
+
+            } catch (error) {
+                console.error(
+                    "Initial profile fetch failed:",
+                    error
+                );
+
+                applyAuthenticatedProfile(
+                    authenticatedUser,
+                    {
+                        name:
+                            authenticatedUser.displayName ||
+                            authenticatedUser.email.split('@')[0],
+
+                        email:
+                            authenticatedUser.email ||
+                            "",
+
+                        profession:
+                            "Community Member"
+                    }
+                );
+
+                return null;
+            }
+        }
+
+        function subscribeToAuthenticatedProfile(
+            authenticatedUser
+        ) {
+            if (
+                !window.db ||
+                !window.doc ||
+                !window.onSnapshot ||
+                !authenticatedUser
+            ) {
+                return;
+            }
+
+            if (
+                profileListenerUnsubscribe
+            ) {
+                profileListenerUnsubscribe();
+                profileListenerUnsubscribe =
+                    null;
+            }
+
+            const profileRef =
+                window.doc(
+                    window.db,
+                    "userProfiles",
+                    authenticatedUser.uid
+                );
+
+            profileListenerUnsubscribe =
+                window.onSnapshot(
+                    profileRef,
+                    snapshot => {
+                        if (
+                            !snapshot.exists()
+                        ) {
+                            return;
+                        }
+
+                        applyAuthenticatedProfile(
+                            authenticatedUser,
+                            snapshot.data()
+                        );
+                    },
+                    error => {
+                        console.error(
+                            "Realtime profile listener error:",
+                            error
+                        );
+                    }
+                );
+        }
+
+        function applyAuthenticatedProfile(
+            authenticatedUser,
+            profile
+        ) {
+            const data =
+                profile || {};
+
+            globalEmail =
+                authenticatedUser.email ||
+                data.email ||
+                globalEmail;
+
+            globalUser =
+                data.name ||
+                authenticatedUser.displayName ||
+                globalEmail.split('@')[0];
+
+            globalCity =
+                data.city ||
+                globalCity;
+
+            globalState =
+                data.state ||
+                globalState;
+
+            globalCountryName =
+                data.country ||
+                globalCountryName;
+
+            globalHomeState =
+                data.originState ||
+                globalHomeState;
+
+            globalCountryCode =
+                data.countryCode ||
+                globalCountryCode;
+
+            updateProfileDisplay(
+                data
+            );
+
+            if (globalCountryCode) {
+                localStorage.setItem(
+                    'hive_living_iso2',
+                    globalCountryCode.toLowerCase()
+                );
+            }
+        }
+
+        function updateProfileDisplay(
+            profile
+        ) {
+            const name =
+                profile.name ||
+                globalUser ||
+                "Hive Member";
+
+            const email =
+                profile.email ||
+                globalEmail ||
+                "Not available";
+
+            const city =
+                profile.city ||
+                globalCity ||
+                "";
+
+            const state =
+                profile.state ||
+                globalState ||
+                "";
+
+            const country =
+                profile.country ||
+                globalCountryName ||
+                "";
+
+            const profession =
+                profile.profession ||
+                "Community Member";
+
+            const location =
+                [
+                    city,
+                    state,
+                    country
+                ]
+                .filter(Boolean)
+                .join(', ') ||
+                "Not provided";
+
+            const origin =
+                profile.originState
+                    ? `${profile.originState}, India`
+                    : "Not provided";
+
+            const fields = {
+                'prof-disp-name':
+                    name,
+
+                'prof-disp-email':
+                    email,
+
+                'prof-disp-loc':
+                    location,
+
+                'prof-disp-origin':
+                    origin,
+
+                'prof-disp-profession':
+                    profession,
+
+                'prof-disp-dob':
+                    formatProfileDate(
+                        profile.dob
+                    ),
+
+                'sidebar-user-name':
+                    name,
+
+                'sidebar-user-loc':
+                    [city, state]
+                        .filter(Boolean)
+                        .join(', ')
+            };
+
+            Object.entries(
+                fields
+            ).forEach(
+                ([id, value]) => {
+                    const element =
+                        document.getElementById(
+                            id
+                        );
+
+                    if (element) {
+                        element.innerText =
+                            value;
+                    }
+                }
+            );
+
+            const uid =
+                window.auth &&
+                window.auth.currentUser
+                    ? window.auth.currentUser.uid
+                    : 'guest';
+
+            const localAvatar =
+                localStorage.getItem(
+                    `hive_avatar_${uid}`
+                );
+
+            const profileImage =
+                profile.photoURL ||
+                localAvatar;
+
+            if (profileImage) {
+                const mainProfilePic =
+                    document.getElementById(
+                        'main-profile-pic'
+                    );
+
+                const profilePagePic =
+                    document.getElementById(
+                        'profile-page-pic'
+                    );
+
+                if (mainProfilePic) {
+                    mainProfilePic.src =
+                        profileImage;
+                }
+
+                if (profilePagePic) {
+                    profilePagePic.src =
+                        profileImage;
+                }
+            }
+        }
+
+        function clearProfileDisplay() {
+            updateProfileDisplay({
+                name:
+                    "Login required",
+
+                email:
+                    "Not available",
+
+                city:
+                    "",
+
+                state:
+                    "",
+
+                country:
+                    "",
+
+                profession:
+                    "Community Member",
+
+                originState:
+                    "",
+
+                dob:
+                    ""
+            });
+        }
+
+        function formatProfileDate(
+            value
+        ) {
+            if (!value) {
+                return "Not provided";
+            }
+
+            let date;
+
+            if (
+                value &&
+                typeof value.toDate ===
+                    'function'
+            ) {
+                date =
+                    value.toDate();
+            } else {
+                date =
+                    new Date(value);
+            }
+
+            if (
+                Number.isNaN(
+                    date.getTime()
+                )
+            ) {
+                return value;
+            }
+
+            return date.toLocaleDateString(
+                undefined,
+                {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                }
+            );
+        }
+
+function triggerGlobalMigration(livingIso2) {
                 const formBox = document.querySelector('#setup-layer > div');
                 if (formBox) formBox.style.display = 'none';
 
@@ -2723,14 +4547,14 @@ body.dark-theme textarea {
                     <div class="absolute top-16 w-full text-center opacity-0 animate-fade-in-down z-50" style="animation-fill-mode: forwards;"><h1 class="text-white font-black text-5xl tracking-tighter drop-shadow-xl mb-2">Welcome to Desi Hive</h1><p class="text-amber-500 font-extrabold text-sm tracking-[0.2em] uppercase drop-shadow-md font-sans">You are connecting to ${globalCity}</p></div>
                     
                     <svg class="absolute inset-0 w-full h-full z-20 pointer-events-none opacity-0 animate-fade-in" preserveAspectRatio="none" viewBox="0 0 1000 500" style="animation-delay: 1s; animation-fill-mode: forwards;">
-                        <path d="M 800 250 Q 500 100 200 250" fill="transparent" stroke="#38bdf8" stroke-width="4" stroke-dasharray="10, 10" class="opacity-60 drop-shadow-[0_0_5px_#38bdf8] animate-path-flow" />
+                        <path d="M 200 250 Q 500 100 800 250" fill="transparent" stroke="#38bdf8" stroke-width="4" stroke-dasharray="10, 10" class="opacity-60 drop-shadow-[0_0_5px_#38bdf8] animate-path-flow" />
                     </svg>
 
-                    <div class="absolute top-1/2 -translate-y-1/2 w-full flex items-center justify-between px-10 md:px-32 z-30 mt-8">
+                    <div class="absolute top-1/2 -translate-y-1/2 w-full flex flex-row-reverse items-center justify-between px-10 md:px-32 z-30 mt-8">
                         <div class="relative flex flex-col items-center opacity-0 animate-fade-in-left" style="animation-delay: 0.5s; animation-fill-mode: forwards;"><div class="w-36 h-48 relative drop-shadow-[0_0_20px_rgba(56,189,248,0.4)]"><svg viewBox="0 0 24 24" fill="#0f172a" stroke="#38bdf8" stroke-width="0.5" class="w-full h-full drop-shadow-2xl"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg><div class="absolute top-[16%] left-1/2 -translate-x-1/2 w-[70px] h-[70px] rounded-full border-2 border-slate-600 overflow-hidden bg-white shadow-inner"><img src="${livingFlag}" class="w-full h-full object-cover"></div></div><span class="absolute -bottom-2 bg-[#0f172a] text-white text-[10px] font-black px-4 py-1.5 rounded-full tracking-widest border border-slate-700 shadow-xl z-20">DESTINATION</span></div>
                         <div class="relative flex flex-col items-center opacity-0 animate-fade-in-right" style="animation-delay: 0.8s; animation-fill-mode: forwards;">
                             <div class="w-32 h-40 md:w-40 md:h-48 flex items-center justify-center drop-shadow-[0_0_25px_rgba(249,115,22,0.7)]">
-                                <img src="india.png?v=1" class="w-full h-full object-contain scale-[1.1] mix-blend-multiply" alt="India Origin Map">
+                               <img src="india.png" class="w-full h-full object-contain scale-[1.1]  opacity-80 drop-shadow-2xl" alt="India Origin Map">
                             </div>
                             <span class="absolute -bottom-2 bg-[#0f172a] text-white text-[10px] font-black px-4 py-1.5 rounded-full tracking-widest border border-slate-700 shadow-xl z-20">ORIGIN</span>
                         </div>
@@ -4035,6 +5859,40 @@ body.dark-theme textarea {
             
         </script>
 <script>
+    async function handleLogout() {
+        try {
+            if (
+                window.signOut &&
+                window.auth
+            ) {
+                await window.signOut(
+                    window.auth
+                );
+            }
+
+            if (
+                typeof profileListenerUnsubscribe ===
+                'function'
+            ) {
+                profileListenerUnsubscribe();
+                profileListenerUnsubscribe =
+                    null;
+            }
+
+        } catch (error) {
+            console.error(
+                "Logout error:",
+                error
+            );
+        }
+
+        localStorage.removeItem(
+            'hive_living_iso2'
+        );
+
+        window.location.reload();
+    }
+
     // Toggle Dark / Light Theme
     function toggleTheme() {
         document.body.classList.toggle('dark-theme');
@@ -4063,9 +5921,11 @@ body.dark-theme textarea {
        <script type="module">
             import {initializeApp} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
             import {getAnalytics} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
-            import {getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, updateDoc, increment} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
-            import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
-
+            import {getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, updateDoc, increment, where, setDoc, getDoc} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+            import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, onAuthStateChanged, signOut, updatePassword, signInWithCustomToken} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+ 
+            window.getAuth = getAuth;
+            window.signInWithCustomToken = signInWithCustomToken;
             const firebaseConfig = {
                 apiKey: "AIzaSyAxLDJrzla1CIIfM8cH3KCgHAyZpN9uilg",
                 authDomain: "desi-hive.firebaseapp.com",
@@ -4093,11 +5953,48 @@ body.dark-theme textarea {
             window.doc = doc;
             window.updateDoc = updateDoc;
             window.increment = increment;
+            window.where = where;
+            window.setDoc = setDoc;
+            window.getDoc = getDoc;
             window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
             window.signInWithEmailAndPassword = signInWithEmailAndPassword;
             window.updateProfile = updateProfile;
+            window.onAuthStateChanged = onAuthStateChanged;
+            window.signOut = signOut;
+            window.updatePassword = updatePassword;
+            window.signInWithCustomToken = signInWithCustomToken;
 
             console.log("Firebase DB & Auth Connected!");
+
+            /*
+             * Firebase Auth is the identity source of truth.
+             * The Firestore profile listener is attached only to
+             * the authenticated user's UID.
+             */
+            onAuthStateChanged(
+                auth,
+                async (user) => {
+                    if (user) {
+                        console.log(
+                            "Authenticated Firebase UID:",
+                            user.uid
+                        );
+
+                        await loadAuthenticatedUserProfile(
+                            user
+                        );
+                    } else {
+                        /*
+                         * The classic-script profile listener owns its
+                         * unsubscribe handle. It is cleaned up by the
+                         * next authenticated profile subscription or logout.
+                         */
+                        console.log(
+                            "No authenticated Firebase user."
+                        );
+                    }
+                }
+            );
             
             // START LIVE SYNC IF READY
             if(window.setupFirebaseListeners) {
